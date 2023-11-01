@@ -1,6 +1,7 @@
 package com.example.database;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -16,9 +17,16 @@ public class PersonDao {
     }
 
     public void insert(Person person) throws SQLException{
-        Statement statement = connetion.createStatement();
+        // Usando PreparedStatement
+        PreparedStatement statement = connetion.prepareStatement("insert into person values(?, ?)");
+        
+        statement.setInt(1, person.getId());
+        statement.setString(2, person.getName());
+        
+        statement.executeUpdate();
+        
 
-        statement.executeUpdate("insert into person values(" + person.getId() + ", '" + person.getName() + "')");
+        //statement.executeUpdate("insert into person values(" + person.getId() + ", '" + person.getName() + "')");
 
         statement.close();
     }

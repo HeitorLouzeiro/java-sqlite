@@ -1,73 +1,97 @@
 package com.example.database;
 
-import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
+import java.util.Scanner;
 
 public class TestDB {
-    public static void main(String[] args) throws IOException{
-        
-        Connection connection = null;
-        try {
-            connection = Database.getInstance().getConnection();
-            Statement statement = connection.createStatement(); // set timeout to 30 sec.
+    public static void main(String[] args) throws SQLException{
+        boolean isRunning = true;
 
-            // create a database connection
-            String sql = FileUltils.loadTextFile("demo/src/main/java/com/example/resource/description.sql");
-            /* System.out.println(sql); */
+        Scanner scanner = new Scanner(System.in);
 
-            // Run the query
-            statement.executeUpdate(sql);
+        PersonDao personDao = new PersonDao();
 
-            // Insert data
-            Person person = new Person();
-            person.setId(3);
-            person.setName("Gean"); 
+        while(true){
+            System.out.println("\n\nEnter your choice: ");
+            System.out.println("1. Insert a new person");
+            System.out.println("2. List persons");
+            System.out.println("3. Search person by id");
+            System.out.println("4. Delete person by id");
+            System.out.println("5. Exit");
 
-            // data access object
-            PersonDao personDao = new PersonDao();
-            personDao.insert(person); 
+            System.out.print("\tYour choice: ");
+            int choice = scanner.nextInt();
 
-            // Delete data
-            /* personDao.delete(2); */
+            switch(choice){
+                case 1:
+                    System.out.println("Enter ID:");
+                    int id = scanner.nextInt();
 
-            Person person3 = new Person();
+                    System.out.println("Enter person name: ");
+                    String name = scanner.next();
 
-            person3.setId(3);
-            person3.setName("Carlos");
+                    Person person = new Person();
+                    person.setId(id);
+                    person.setName(name);
+                    
+                    personDao.insert(person);
 
-            personDao.update(person3);
+                    break;
+                case 2:
+                    System.out.println("\nList of persons: ");
+                    List<Person> persons = personDao.getAll();
+                    for(Person personList : persons){
+                        System.out.println("\t" + personList);
+                    }
 
+                    break;
+                case 3:
+                    System.out.println("Enter ID:");
+                    int idSearch = scanner.nextInt();
 
+                    Person personSearch = personDao.getById(idSearch);
+                    
+                    // caso der erro, usar o scanner.nextLine() para limpar o buffer
+                    //in.nextLine();
 
-            // Get all data
-            List<Person> persons = personDao.getAll();
-            
-            for (Person p : persons) {
-                System.out.println(p);
+                    if (personSearch ==null){
+                        System.out.println("Person not found");
+                    }else{
+                        System.out.println("Data found: " + personSearch);
+                        System.out.println("Do you want to update this person?");
+                        System.out.println("1. Yes");
+                        System.out.println("2. No");
+                        System.out.print("\tYour choice: ");
+
+                        int choiceUpdate = scanner.nextInt();
+
+                        if (choiceUpdate == 1) {
+                            System.out.println("Enter new name: ");
+                            String newName = scanner.next();
+                            personSearch.setName(newName);
+                            personDao.update(personSearch);
+                        }else{
+                            System.out.println("Person not updated");
+                        }
+                    }
+                    break;
+                case 4:
+                    System.out.println("Enter ID:");
+                    int idDelete = scanner.nextInt();
+                    personDao.delete(idDelete);
+                    break;
+                case 5:
+                    isRunning = false;
+                    System.out.println("Sistema Encerrado...");
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Invalid choice");
             }
 
-            // mostrando dados pelo metodo da classe PersonDao com um metodo especifico
-            /* PersonDao personDao = new PersonDao(); */
-/*             Person person2 = personDao.getById(2);
-            System.out.println(person2); */
 
-            
-
-        } catch (SQLException e) {
-            // if the error message is "out of memory",
-            // it probably means no database file is found
-            System.err.println(e.getMessage());
-        } finally {
-            try {
-                if (connection != null)
-                    connection.close();
-            } catch (SQLException e) {
-                // connection close failed.
-                System.err.println(e.getMessage());
-            }
         }
     }
 }
+

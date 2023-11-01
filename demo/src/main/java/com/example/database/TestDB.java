@@ -1,19 +1,17 @@
-package com.example;
+package com.example.database;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class TestDB {
     public static void main(String[] args) {
+        
         Connection connection = null;
         try {
-            // create a database connection
-            connection = DriverManager.getConnection("jdbc:sqlite:sample.db");
-            Statement statement = connection.createStatement();
-            statement.setQueryTimeout(30); // set timeout to 30 sec.
+            connection = Database.getInstance().getConnection();
+            Statement statement = connection.createStatement(); // set timeout to 30 sec.
 
             statement.executeUpdate("drop table if exists person");
             statement.executeUpdate("create table person (id integer, name string)");

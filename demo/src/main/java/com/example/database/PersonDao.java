@@ -67,4 +67,14 @@ public class PersonDao {
         
         return null;
     }
+
+    public void update(Person person) throws SQLException{
+        Statement statement = connetion.createStatement();
+
+        /* UPDATE table SET column = value [, ...] [WHERE condition] */
+
+        statement.executeUpdate("update person set name = '" + person.getName() + "' where id = " + person.getId());
+
+        statement.close();
+    }
 }

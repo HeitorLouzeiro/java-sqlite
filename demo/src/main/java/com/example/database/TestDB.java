@@ -33,6 +33,15 @@ public class TestDB {
             // Delete data
             /* personDao.delete(2); */
 
+            Person person3 = new Person();
+
+            person3.setId(3);
+            person3.setName("Carlos");
+
+            personDao.update(person3);
+
+
+
             // Get all data
             List<Person> persons = personDao.getAll();
             
@@ -44,6 +53,8 @@ public class TestDB {
             /* PersonDao personDao = new PersonDao(); */
 /*             Person person2 = personDao.getById(2);
             System.out.println(person2); */
+
+            
 
         } catch (SQLException e) {
             // if the error message is "out of memory",

@@ -24,5 +24,9 @@ public class Person {
     public Person() {
 
     }
+
+    public String toString() {
+        return "Person [id=" + id + ", name=" + name + "]";
+    }
     
 }

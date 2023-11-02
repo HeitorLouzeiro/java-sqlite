@@ -1,11 +1,12 @@
 package com.example.database;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
 public class TestDB {
-    public static void main(String[] args) throws SQLException{
+    public static void main(String[] args) throws SQLException, IOException{
         boolean isRunning = true;
 
         Scanner scanner = new Scanner(System.in);

@@ -1,5 +1,6 @@
 package com.example.database;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,7 +12,7 @@ import java.util.List;
 // DAO: Data Access Object
 public class PersonDao {
     private Connection connetion;
-    public PersonDao() {
+    public PersonDao() throws IOException {
         connetion = Database.getInstance().getConnection();
 
     }
